@@ -39,4 +39,30 @@ export const visitsController = {
     }
   },
   },
+
+  uploadImage: {
+    // method for uploading an image inside a visit folder
+    handler: async function (request, h) {
+      try {
+        const visit = await db.visitStore.getVisitById(request.params.id);
+        const file = request.payload.imagefile;
+        if (Object.keys(file).length > 0) {
+          const url = await imageStore.uploadImage(request.payload.imagefile);
+          visit.img = url;
+          await db.visitStore.updateVisit(visit);
+        }
+        return h.redirect(`/visit/${visit._id}`);
+      } catch (err) {
+        const visit = await db.visitStore.getVisitById(request.params.id);
+        console.log(err);
+        return h.redirect(`/visit/${visit._id}`);
+      }
+    },
+    payload: {
+      multipart: true,
+      output: "data",
+      maxBytes: 209715200,
+      parse: true,
+    },
+  },
 };

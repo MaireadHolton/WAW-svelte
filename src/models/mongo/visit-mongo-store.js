@@ -7,14 +7,23 @@ export const visitMongoStore = {
     return visits;
   },
 
-    // method for finding visits within a list from the database
+    // method for finding visits within a county from the database
     async getVisitsByCounty(id) {
       const visits = await Visit.find({ county: id });
       return visits;
     },
 
+    // method for finding visits by ID from the database
+    async getVisitById(id) {
+      if (id) {
+        const visit = await Visit.findOne({ _id: id }).lean();
+        return visit;
+      }
+      return null;
+    },
+
    // method for adding a visit to the database
-  async createVisit(location, latitude, longitude, date, details, county, visitor) {
+  async createVisit(location, latitude, longitude, date, details, county, visitor, img) {
     const newVisit = new Visit({
       location, 
       latitude,
@@ -22,7 +31,8 @@ export const visitMongoStore = {
       date,
       details,
       county: county._id,
-      visitor: visitor._id
+      visitor: visitor._id,
+      img,
     });
     await newVisit.save();
     return newVisit;
@@ -32,4 +42,17 @@ export const visitMongoStore = {
   async deleteAllVisits() {
     await Visit.deleteMany({});
   },
-}
+
+  // method for updating a visit
+  async updateVisit(visit, updatedVisit) {
+    visit.location = updatedVisit.location;
+    visit.latitude = updatedVisit.latitude;
+    visit.longitude = updatedVisit.longitude;
+    visit.date = updatedVisit.date;
+    visit.detail = updatedVisit.detail;
+    visit.county = updatedVisit.county;
+    visit.visitor = updatedVisit.visitor;
+    visit.img = updatedVisit.img;
+    await visit.save();
+  },
+};

@@ -1,4 +1,4 @@
-import Mongoose, { SchemaType, SchemaTypes } from "mongoose";
+import Mongoose, { SchemaTypes } from "mongoose";
 
 const { Schema } = Mongoose;
 
@@ -12,14 +12,15 @@ const visitSchema = new Schema({
     },
     date: String,
     details: String,
-    visitor: {
-      type: Schema.Types.ObjectId,
-      ref: "User",
-    },
     county: {
       type: Schema.Types.ObjectId,
       ref: "County"
     },
+    visitor: {
+      type: Schema.Types.ObjectId,
+      ref: "User",
+    },
+    img: String,
   });
 
 export const Visit = Mongoose.model("Visit", visitSchema);

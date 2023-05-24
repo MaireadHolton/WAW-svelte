@@ -17,6 +17,7 @@ export const webRoutes = [
 
   { method: "GET", path: "/visit", config: visitsController.index },
   { method: "POST", path: "/visit", config: visitsController.createVisit },
+  { method: "POST", path: "/visit/{id}/uploadimage", config: visitsController.uploadImage},
   { method: "GET", path: "/report", config: visitsController.report },
 
 ];
